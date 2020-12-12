@@ -9,7 +9,6 @@ def load_file(file_path):
 
 
 def save_file(data, output_path):
-    print data
     with open(output_path, 'w') as f:
         for d in data:
             f.write(d + '\n')
@@ -39,8 +38,8 @@ def from_syn(file_path, height=0.0, width=0.0, offset=0):
     for line in line_list:
         name, frame, x_pos, y_pos, ref = line.split()
         frame = int(frame) + offset
-        x_pos = float(x_pos+1)/2 * int(width)
-        y_pos = 1 - float(y_pos)/2 * int(height)
+        x_pos = (float(x_pos) + 1)/2 * int(height)
+        y_pos = (1 - float(y_pos))/2 * int(width)
         if name in tracker_data.keys():
             tracker_data[name].setdefault(frame, [x_pos, y_pos])
         else:
@@ -93,9 +92,8 @@ def to_3de(tracker_data):
     return result_data
 
 
-def to_pft(tracker_data):
+def to_pft(tracker_data, clip_number='1'):
     result_data = []
-    clip_number = '1'
     for name, frames in tracker_data.iteritems():
         result_data.append('"{0}"'.format(name))
         result_data.append(clip_number)
@@ -107,5 +105,24 @@ def to_pft(tracker_data):
     return result_data
 
 
-def to_syn(tracker_data):
+def to_syn(tracker_data, width, height):
     result_data = []
+    for name, frames in tracker_data.iteritems():
+        for frame in frames:
+            x_pos = float(frames[frame][0]) / int(width) * 2 - 1
+            y_pos = 1 - float(frames[frame][1]) / int(height) * 2
+            line = '{0} {1} {2} {3} 15'.format(name, str(frame), str(x_pos), str(y_pos))
+            result_data.append(line)
+    return result_data
+
+
+def to_bju(tracker_data, height):
+    result_data = []
+    for name, frames in tracker_data.iteritems():
+        for frame in frames:
+            x_pos = float(frames[frame][0])
+            y_pos = height - float(frames[frame][1])
+            line = '{0} {1} {2} {3}'.format(name, str(frame), str(x_pos), str(y_pos))
+            result_data.append(line)
+    return result_data
+
