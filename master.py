@@ -15,7 +15,7 @@ def save_file(data, output_path):
             f.write(d + '\n')
 
 
-def from_3de(file_path, offset=0):
+def from_3de(file_path, offset):
     tracker_data = {}
     line_list = load_file(file_path)
     switch = True
@@ -107,8 +107,5 @@ def to_pft(tracker_data):
     return result_data
 
 
-_file_path = r'D:\test\boujou2.txt'
-result = from_bju(_file_path, width=1080.0, offset=1000)
-result2 = to_pft(result)
-outp = r'D:\test\boujou2_to_pft.txt'
-save_file(result2, outp)
+def to_syn(tracker_data):
+    result_data = []
