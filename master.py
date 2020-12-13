@@ -1,6 +1,3 @@
-import pprint
-
-
 def load_file(file_path):
     with open(file_path) as f:
         line_list = f.readlines()
@@ -32,7 +29,7 @@ def from_3de(file_path, offset):
     return tracker_data
 
 
-def from_syn(file_path, height=0.0, width=0.0, offset=0):
+def from_syn(file_path, height, width, offset=0):
     tracker_data = {}
     line_list = load_file(file_path)
     for line in line_list:
@@ -61,7 +58,7 @@ def from_pft(file_path, offset=0):
     return tracker_data
 
 
-def from_bju(file_path, width=0.0, offset=0):
+def from_bju(file_path, width, offset=0):
     tracker_data = {}
     line_list = load_file(file_path)
     for line in line_list:
@@ -92,7 +89,7 @@ def to_3de(tracker_data):
     return result_data
 
 
-def to_pft(tracker_data, clip_number='1'):
+def to_pft(tracker_data, clip_number):
     result_data = []
     for name, frames in tracker_data.iteritems():
         result_data.append('"{0}"'.format(name))
@@ -125,4 +122,3 @@ def to_bju(tracker_data, height):
             line = '{0} {1} {2} {3}'.format(name, str(frame), str(x_pos), str(y_pos))
             result_data.append(line)
     return result_data
-
